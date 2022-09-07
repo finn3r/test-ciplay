@@ -1,9 +1,14 @@
 export interface IUserLogin{
     email: string,
-    password: number
+    password: string
 }
 
-export interface IUser extends IUserLogin{
+export interface IUserChange {
+    oldPassword: string,
+    newPassword: string
+}
+
+export interface IUser extends Omit<IUserLogin, 'password'>{
     id: number,
     isAuth?: boolean,
 }

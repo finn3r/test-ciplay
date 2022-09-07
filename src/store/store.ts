@@ -1,7 +1,13 @@
 import {combineReducers, configureStore} from "@reduxjs/toolkit";
 import {userAPI} from "../services/UserService";
+import userReducer from "./reducers/UserSlice";
+import notifyReducer from "./reducers/NotifySlice";
+import loginReducer from "./reducers/LoginSlice";
 
 const rootReducer = combineReducers({
+    login: loginReducer,
+    user: userReducer,
+    notify: notifyReducer,
     [userAPI.reducerPath]: userAPI.reducer
 })
 
