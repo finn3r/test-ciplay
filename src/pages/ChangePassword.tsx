@@ -8,10 +8,7 @@ import Spinner from "../components/Spinner";
 
 const ChangePassword: React.FC = () => {
     const [password, setPassword] = useState("");
-    const {register, handleSubmit, formState: {errors}, reset} =
-        useForm({
-            mode: "all"
-        });
+    const {register, handleSubmit, formState: {errors}, reset} = useForm();
     const [userChangePassword, {isLoading}] = userAPI.useChangePasswordMutation();
 
     const handleChangePassword = (fields: FieldValues) => {
@@ -43,7 +40,7 @@ const ChangePassword: React.FC = () => {
                             message: "Password must have capital letter"
                         }
                     })}/>
-                {errors.oldPassword ? <ST.InputError>{errors.oldPassword.message?.toString()}</ST.InputError> : null}
+                {errors.oldPassword ? <ST.InputError>{errors.oldPassword.message?.toString()}</ST.InputError> : <ST.ErrorNull/>}
                 <ST.Input
                     type="password" placeholder="New password"
                     {...register("newPassword", {
@@ -64,10 +61,10 @@ const ChangePassword: React.FC = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
-                {errors.newPassword ? <ST.InputError>{errors.newPassword.message?.toString()}</ST.InputError> : null}
+                {errors.newPassword ? <ST.InputError>{errors.newPassword.message?.toString()}</ST.InputError> : <ST.ErrorNull/>}
                 <ST.Input type="password" placeholder="Repeat password"
                           {...register("password_repeat", {validate: value => value === password})}/>
-                {errors.password_repeat ? <ST.InputError>Passwords don't match</ST.InputError> : null}
+                {errors.password_repeat ? <ST.InputError>Passwords don't match</ST.InputError> : <ST.ErrorNull/>}
                 <ST.Input type="submit" value={"SIGN IN"}/>
                 <ST.FormFetching active={isLoading}>
                     <Spinner/>

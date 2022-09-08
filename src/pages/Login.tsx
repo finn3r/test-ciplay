@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FieldValues, useForm} from "react-hook-form";
 import * as ST from "../styled";
 import {useAppDispatch, useAppSelector} from "../hooks/redux";
@@ -16,19 +16,26 @@ const Login: React.FC = () => {
     const {email, password} = useAppSelector(state => state.login);
     const {changeEmail, changePassword} = loginSlice.actions;
     const dispatch = useAppDispatch();
-    const {register, handleSubmit, formState: {errors}} =
-        useForm({
-            mode: "all"
-        });
+    const {register, handleSubmit, formState: {errors}, watch, setValue} = useForm();
     const {isLoading, refetch} = userAPI.useLoginQuery({...loginValues}, {
-        skip: loginValues.email===""&&loginValues.password===""
+        skip: loginValues.email === "" && loginValues.password === ""
     });
+
+    useEffect(() => () => {
+        dispatch(changeEmail(watch("email")));
+        dispatch(changePassword(watch("password")));
+    }, [dispatch, changeEmail, changePassword, watch]);
 
     const handleLogin = (fields: FieldValues) => {
         const user = {...fields} as IUserLogin;
         setLoginValues(user);
         refetch();
     };
+
+    useEffect(() => {
+        setValue("email", email);
+        setValue("password", password);
+    },[setValue, email, password]);
 
     return (
         <ST.FlexContainer>
@@ -42,10 +49,8 @@ const Login: React.FC = () => {
                             value: /^\S+@\S+$/i,
                             message: "Invalid email address"
                         }
-                    })}
-                    value={email}
-                    onChange={(e) => dispatch(changeEmail(e.target.value))}/>
-                {errors.email ? <ST.InputError>{errors.email.message?.toString()}</ST.InputError> : null}
+                    })}/>
+                {errors.email ? <ST.InputError>{errors.email.message?.toString()}</ST.InputError> : <ST.ErrorNull/>}
                 <ST.Input
                     type="password" placeholder="Password"
                     {...register("password", {
@@ -62,10 +67,8 @@ const Login: React.FC = () => {
                             value: /[A-Z]/,
                             message: "Password must have capital letter"
                         }
-                    })}
-                    value={password}
-                    onChange={(e) => dispatch(changePassword(e.target.value))}/>
-                {errors.password ? <ST.InputError>{errors.password.message?.toString()}</ST.InputError> : null}
+                    })}/>
+                {errors.password ? <ST.InputError>{errors.password.message?.toString()}</ST.InputError> : <ST.ErrorNull/>}
                 <ST.Input type="submit" value={"SIGN IN"}/>
                 <ST.FormFetching active={isLoading}>
                     <Spinner/>

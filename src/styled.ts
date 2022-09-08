@@ -66,19 +66,23 @@ export const Input = styled.input`
   }
   
   &[type='submit']{
+    margin-top: 10px;
     padding: 10px 5px;
-    background: rgb(246, 185, 26);
+    background: rgb(246, 185, 26, 0.85);
     :hover {
-      background: rgba(246, 185, 26, 0.9);
       cursor: pointer;
     }
   }
 `;
 
-export const InputError = styled.div`
+export const ErrorNull = styled.div`
+  margin: -20px 0 -15px;
+  height: 20px;
+`;
+
+export const InputError = styled(ErrorNull)`
   color: #FF3700FF;
   font-size: 14px;
-  margin: -10px 0 5px;
   ::before {
     display: inline;
     content: "⚠ ";
@@ -93,7 +97,7 @@ export const Spinner = styled.img`
 export const NavigationContainer = styled.div`
   font-size: 20px;
   display: flex;
-  gap: 20px;
+  margin-bottom: 10px;
 `;
 
 export const NavigationButton = styled.button<{ active?: boolean, disabled?: boolean }>`
@@ -101,6 +105,7 @@ export const NavigationButton = styled.button<{ active?: boolean, disabled?: boo
   transition: all 250ms ease 0s;
   border: none;
   padding: 0 0 5px;
+  margin-right: 20px;
   border-radius: 0;
   background: none;
   color: white;
