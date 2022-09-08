@@ -14,7 +14,7 @@ const Login: React.FC = () => {
         password: ""
     });
     const {email, password} = useAppSelector(state => state.login);
-    const {changeEmail, changePassword} = loginSlice.actions;
+    const {setState} = loginSlice.actions;
     const dispatch = useAppDispatch();
     const {register, handleSubmit, formState: {errors}, watch, setValue} = useForm();
     const {isLoading, refetch} = userAPI.useLoginQuery({...loginValues}, {
@@ -22,9 +22,11 @@ const Login: React.FC = () => {
     });
 
     useEffect(() => () => {
-        dispatch(changeEmail(watch("email")));
-        dispatch(changePassword(watch("password")));
-    }, [dispatch, changeEmail, changePassword, watch]);
+        dispatch(setState({
+            email: watch("email"),
+            password: watch("password")
+        }));
+    }, [dispatch, setState, watch]);
 
     const handleLogin = (fields: FieldValues) => {
         const user = {...fields} as IUserLogin;

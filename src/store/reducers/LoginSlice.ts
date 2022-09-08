@@ -14,11 +14,8 @@ export const loginSlice = createSlice({
     name: 'login',
     initialState,
     reducers: {
-        changeEmail(state, action: PayloadAction<string>) {
-            state.email = action.payload;
-        },
-        changePassword(state, action: PayloadAction<string>) {
-            state.password = action.payload;
+        setState(state, action: PayloadAction<ILogin>) {
+            Object.assign(state, action.payload)
         }
     }
 })

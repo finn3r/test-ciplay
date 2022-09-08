@@ -10,15 +10,17 @@ import Spinner from "../components/Spinner";
 
 const Register: React.FC = () => {
     const {email, password} = useAppSelector(state => state.login);
-    const {changeEmail, changePassword} = loginSlice.actions;
+    const {setState} = loginSlice.actions;
     const dispatch = useAppDispatch();
     const {register, handleSubmit, formState: {errors}, watch, setValue} = useForm();
     const [userRegister, {isLoading}] = userAPI.useRegisterMutation();
 
     useEffect(() => () => {
-        dispatch(changeEmail(watch("email")));
-        dispatch(changePassword(watch("password")));
-    }, [dispatch, changeEmail, changePassword, watch]);
+        dispatch(setState({
+            email: watch("email"),
+            password: watch("password")
+        }));
+    }, [dispatch, setState, watch]);
 
     const handleRegister = (fields: FieldValues) => {
         delete fields['password_repeat'];
