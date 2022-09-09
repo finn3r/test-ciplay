@@ -37,7 +37,7 @@ export const Form = styled.form`
   background: linear-gradient(#2e3a6a, #2f0b45);
   border-radius: 10px;
   width: 100%;
-  max-width: 300px;
+  max-width: 350px;
 `;
 
 export const FormFetching = styled.div<{ active?: boolean }>`

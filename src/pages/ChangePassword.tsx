@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import * as ST from '../styled';
 import {FieldValues, useForm} from "react-hook-form";
 import {IUserChange} from "../models/IUser";
@@ -7,8 +7,7 @@ import NavBar from "../components/NavBar";
 import Spinner from "../components/Spinner";
 
 const ChangePassword: React.FC = () => {
-    const [password, setPassword] = useState("");
-    const {register, handleSubmit, formState: {errors}, reset} = useForm();
+    const {register, handleSubmit, formState: {errors}, reset, watch} = useForm();
     const [userChangePassword, {isLoading}] = userAPI.useChangePasswordMutation();
 
     const handleChangePassword = (fields: FieldValues) => {
@@ -16,7 +15,6 @@ const ChangePassword: React.FC = () => {
         const user = {...fields} as IUserChange;
         userChangePassword(user);
         reset();
-        setPassword("");
     };
 
     return (
@@ -40,7 +38,8 @@ const ChangePassword: React.FC = () => {
                             message: "Password must have capital letter"
                         }
                     })}/>
-                {errors.oldPassword ? <ST.InputError>{errors.oldPassword.message?.toString()}</ST.InputError> : <ST.ErrorNull/>}
+                {errors.oldPassword ? <ST.InputError>{errors.oldPassword.message?.toString()}</ST.InputError> :
+                    <ST.ErrorNull/>}
                 <ST.Input
                     type="password" placeholder="New password"
                     {...register("newPassword", {
@@ -57,13 +56,11 @@ const ChangePassword: React.FC = () => {
                             value: /[A-Z]/,
                             message: "Password must have capital letter"
                         }
-                    })}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-                {errors.newPassword ? <ST.InputError>{errors.newPassword.message?.toString()}</ST.InputError> : <ST.ErrorNull/>}
+                    })}/>
+                {errors.newPassword ? <ST.InputError>{errors.newPassword.message?.toString()}</ST.InputError> :
+                    <ST.ErrorNull/>}
                 <ST.Input type="password" placeholder="Repeat password"
-                          {...register("password_repeat", {validate: value => value === password})}/>
+                          {...register("password_repeat", {validate: value => value === watch("newPassword")})}/>
                 {errors.password_repeat ? <ST.InputError>Passwords don't match</ST.InputError> : <ST.ErrorNull/>}
                 <ST.Input type="submit" value={"SIGN IN"}/>
                 <ST.FormFetching active={isLoading}>
